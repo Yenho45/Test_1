@@ -1,0 +1,86 @@
+"""
+Payroll Calculator
+This script collects employee details, including:
+ - Employee's name
+ - Number of hours worked
+ - Hourly pay rate
+It then validates data and calculates their payroll, including:
+- Gross pay
+- ATO tax deductions
+- Medicare levy deductions
+- Net pay
+"""
+
+def is_string(prompt: str) -> str:
+    """
+    Function to validate input from user "is string" or not
+
+    :param prompt: The input message displayed to the user.
+    :return: A valid non-empty string.
+    """
+    while True:
+        value = input(prompt)
+        if value:
+            return value
+        print("Error: This value can't be empty!")
+
+def is_float(prompt: str, min_value: float = 0,
+                     max_value: float | None = None) -> float:
+    """
+    Function to validate input from user "is float" or not
+
+    :param prompt: The input message displayed to the user.
+    :param min_value: The minimum allowed value (default is 0).
+    :param max_value: The maximum allowed value (default is None).
+    :return: A valid floating-point number within the specified range.
+    """
+    while True:
+        try:
+            value = float(input(prompt))
+            if value < min_value:
+                print(f"Error: Value can't be negative")
+            elif max_value is not None and value > max_value:
+                print(f"Error: Value must not exceed {max_value}!")
+            else:
+                return value
+        except ValueError:
+            print("Error: Please enter a valid number!")
+
+
+def main() -> None:
+    """
+    Main function to collect user input, validate it, compute payroll details
+    and display the payroll statement.
+    """
+    # Collect user input
+    employee_name = is_string("Enter employee's name: ")
+    hours_worked = is_float("Enter number of hours worked in a week: ", 0)
+    hourly_rate = is_float("Enter hourly pay rate: ", 0)
+    ato_tax_rate = is_float(
+        "Enter ATO tax withholding rate: ", 0, 1
+    ) #tax rate can't be more than 1
+    medicare_levy_rate = is_float(
+        "Enter Medicare Levy rate: ", 0, 1
+    ) #medicare levy rate can't be more than 1
+
+    # Compute payroll details
+    gross_pay = hours_worked * hourly_rate
+    ato_tax = gross_pay * ato_tax_rate
+    medicare_levy = gross_pay * medicare_levy_rate
+    total_deductions = ato_tax + medicare_levy
+    net_pay = gross_pay - total_deductions
+
+    # Display payroll statement
+    print(f"\nEmployee Name: {employee_name}")
+    print(f"Hours Worked: {hours_worked:.1f}")
+    print(f"Pay Rate: ${hourly_rate:.2f}")
+    print(f"Gross Pay: ${gross_pay:.2f}")
+    print("Deductions:")
+    print(f"\tATO tax ({ato_tax_rate * 100:.1f}%): ${ato_tax:.2f}")
+    print(f"\tMedicare Levy ({medicare_levy_rate * 100:.1f}%): ${medicare_levy:.2f}")
+    print(f"\tTotal Deductions: ${ato_tax + medicare_levy:.1f}")
+    print(f"Net Pay: ${net_pay:.2f}")
+
+
+if __name__ == "__main__":
+    main()
