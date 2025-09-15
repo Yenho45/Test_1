@@ -11,7 +11,7 @@ It then validates data and calculates their payroll, including:
 - Net pay
 """
 
-def is_string(prompt: str) -> str:
+def is_string(prompt: int) -> str:
     """
     Function to validate input from user "is string" or not
 
